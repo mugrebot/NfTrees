@@ -1,11 +1,12 @@
-pragma solidity >=0.6.0 <0.7.0;
+pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import 'base64-sol/base64.sol';
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 import './HexStrings.sol';
 import './ToColor.sol';
@@ -13,7 +14,7 @@ import './ToColor.sol';
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract YourCollectible is ERC721, Ownable {
+contract YourCollectible is Ownable, ERC721Enumerable {
 
   using Strings for uint256;
   using HexStrings for uint160;
@@ -21,8 +22,8 @@ contract YourCollectible is ERC721, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  constructor() public ERC721("Loogies", "LOOG") {
-    // RELEASE THE LOOGIES!
+  constructor() public ERC721("NFTrees", "TREE") {
+    // RELEASE THE NFTreeS!
   }
 
   mapping (uint256 => bytes3) public color;
@@ -58,8 +59,8 @@ contract YourCollectible is ERC721, Ownable {
 
   function tokenURI(uint256 id) public view override returns (string memory) {
       require(_exists(id), "not exist");
-      string memory name = string(abi.encodePacked('Loogie #',id.toString()));
-      string memory description = string(abi.encodePacked('This Loogie is the color #',color[id].toColor(),' with a chubbiness of ',uint2str(chubbiness[id]),'!!!'));
+      string memory name = string(abi.encodePacked('NFTree #',id.toString()));
+      string memory description = string(abi.encodePacked('This NFTree is the color #',color[id].toColor(),'!!!'));
       string memory image = Base64.encode(bytes(generateSVGofTokenById(id)));
 
       return
@@ -134,7 +135,7 @@ contract YourCollectible is ERC721, Ownable {
       string memory render = string(abi.encodePacked(
         '<g id="head">',
           '<path id="Bottom" d="M576.90625,539l0,-163" style="fill:#000000;stroke:#',color[id].toColor(),';stroke-width:5px;"/>',
-          '<path id="Bottom1" d="M576.90625,376l-61.3265,-79.92225" style="fill:#000000;stroke:#',color[id].toColor(),';stroke-width:5px;"/>',  
+          '<path id="Bottom1" d="M576.90625,376l-69.3265,-79.92225" style="fill:#000000;stroke:#',color[id].toColor(),';stroke-width:5px;"/>',  
           '<use xlink:href="#Bottom1" transform="scale (-1, 1)" transform-origin="576.90625 576.90625"/>'        
           '<path id="Bottom2" d="M515.57975,296.07775l-60.13928,-16.11427" style="fill:#000000;stroke:#',color[id].toColor(),';stroke-width:5px;"/>',
           '<use xlink:href="#Bottom2" transform="scale (-1, 1)" transform-origin="576.90625 576.90625"/>'

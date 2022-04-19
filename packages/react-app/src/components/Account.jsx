@@ -41,7 +41,7 @@ import Wallet from "./Wallet";
 
 export default function Account({
   address,
-  userProvider,
+  userSigner,
   localProvider,
   mainnetProvider,
   price,
@@ -50,7 +50,6 @@ export default function Account({
   loadWeb3Modal,
   logoutOfWeb3Modal,
   blockExplorer,
-  isSigner
 }) {
   const modalButtons = [];
   if (web3Modal) {
@@ -84,7 +83,7 @@ export default function Account({
 
   const { currentTheme } = useThemeSwitcher();
 
-  const display = minimized || !isSigner ? (
+  const display = minimized ? (
     ""
   ) : (
     <span>
@@ -96,7 +95,8 @@ export default function Account({
       <Balance address={address} provider={localProvider} price={price} />
       <Wallet
         address={address}
-        provider={userProvider}
+        provider={localProvider}
+        signer={userSigner}
         ensProvider={mainnetProvider}
         price={price}
         color={currentTheme === "light" ? "#1890ff" : "#2caad9"}
